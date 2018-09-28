@@ -37,10 +37,10 @@ void imprimir(int impresora){//imprimo
 
 }
 
-void *hilo(semaforos *sem){
-    int n =requerir(sem);//bloqueo
+void *hilo(void *sem){
+    int n =requerir((semaforos*)sem);//bloqueo
     imprimir(n);//seccion critica
-    liberar(n,sem);//desbloqueo
+    liberar(n,(semaforos*)sem);//desbloqueo
     pthread_exit(EXIT_SUCCESS);
 }
 
