@@ -2,7 +2,7 @@
 Impresoras con semaforos
 
 
-para compilar:
+Para compilar:
 
 $ gcc main.c -lpthread -o nombre_archivo
 
