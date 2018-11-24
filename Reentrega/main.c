@@ -30,18 +30,17 @@ void liberar(int impresora,semaforos *sem){//desbloqueo la impresora
 }
 
 void imprimir(int impresora){//imprimo
-    printf("estoy imprimiento en la impresora %d.\n",impresora);
+    printf("[Impresora %d] Imprimiendo.\n",impresora);
     sleep(rand()%4);
-    printf("termine de imprimir en la impresora %d.\n",impresora);
-
+    printf("[Impresora %d] Termine de imprimir.\n",impresora);
 }
 
-void *hilo(void *sem){
+void *usuario(void *sem){
     sem_wait(&((semaforos*)sem)->aux);//si hay alguna impresora libre
     int n =requerir((semaforos*)sem);//bloqueo la impresora
-    imprimir(n);//seccion critica
+    imprimir(n);//imprimo
     liberar(n,(semaforos*)sem);//desbloqueo la impresora
-    sem_post(&((semaforos*)sem)->aux);
+    sem_post(&((semaforos*)sem)->aux);//hay una impresora libre mas
     pthread_exit(EXIT_SUCCESS);
 }
 
@@ -55,9 +54,8 @@ int main()
 
     int i;
     for(i=0;i<MAXUSERS;i++){
-        pthread_create(&threads[i],NULL,hilo,sem);
+        pthread_create(&threads[i],NULL,usuario,sem);
     }
-
     for (i = 0; i < MAXUSERS; i++) {
 		pthread_join(threads[i], NULL);
     }
